@@ -2,7 +2,7 @@
 
 base de dato para localizar donde guardo todo lo grabado en cd
 
-[x] Base de Datos Implementada
-[] Menu Simple para Terminal
-[] Añadir descarga de Imagenes
-[] Crear Gui en GTK
+- [x] Base de Datos Implementada
+- [ ] Menu Simple para Terminal
+- [ ] Añadir descarga de Imagenes
+- [ ] Crear Gui en GTK

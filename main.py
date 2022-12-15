@@ -4,12 +4,13 @@ db = PeliculasDB()
 
 # para insertar pelicula:
 # titulo
+# anho
 # caratula
 # ubicacion
 
-#pelicula = ('300','','carpeta 1')
-#pelicula2 = ('willow','','carpeta 1')
-#pelicula3 = ('casi 300','','carpeta 1')
+#pelicula = ('300','','','carpeta 1')
+#pelicula2 = ('willow','','','carpeta 1')
+#pelicula3 = ('casi 300','','','carpeta 1')
 
 #INSERTAR
 #db.insertar_datos(pelicula)
@@ -29,12 +30,12 @@ db = PeliculasDB()
 #print (db)
 
 ayuda="""
-(I)nsertar Pelicula
-(E)liminar Pelicula
-(M)odificar Pelicula
-(B)uscar Pelicula
-(L)istar Peliculas
-(Q)uit Salir
+(I) Insertar Pelicula
+(E) Eliminar Pelicula
+(M) Modificar Pelicula
+(B) Buscar Pelicula
+(L) Listar Peliculas
+(Q) Salir
 """
 
 def main():
@@ -51,15 +52,16 @@ def main():
             print("***  Saliendo del Sistema  ***\n")
         
         elif opcion == 'L':
-            print("\n( Id, Pelicula, Caratula, Ubicacion )\n")
+            print("\n( Id, Pelicula, Año, Caratula, Ubicacion )\n")
             print(db)
         
         elif opcion == 'I':
             print("***  Insertar Pelicula  ***\n")
             titulo=input("Titulo de la Pelicula: ")
+            anho=input("Año de la Pelicula: ")
             caratula=input("Ubicacion y nombre de la cartula: ")
             ubicacion=input("Ubicacion de la Pelicula: ")
-            pelicula=(titulo,caratula,ubicacion)
+            pelicula=(titulo,anho,caratula,ubicacion)
             n = db.insertar_datos(pelicula)
             if n==0:
                 print("Imposible Añadir Pelicula\n")
@@ -71,16 +73,18 @@ def main():
             peli=input("Nombre de la Pelicula a Localizar: ")
             dato=db.buscar_pelicula(peli)
             for row in dato:
-                print(str(row))
+                print(row)
         
         elif opcion == 'M':
             print("***  Modificar Pelicula  ***\n")
             peli=int(input("Id de la Pelicula a Modificar: "))
             atributo_n=0
-            while atributo_n != 't' and atributo_n != 'c' and atributo_n != 'u':
-                atributo_n=input("que parametro vas a Modificar ( 't'titulo, 'c'caratula, 'u'ubicacion):")
+            while atributo_n != 't' and atributo_n != 'c' and atributo_n != 'u' and atributo_n != 'a':
+                atributo_n=input("que parametro vas a Modificar ( 't'titulo, 'c'caratula, 'a'año, 'u'ubicacion):")
                 if atributo_n=='t':
                     atributo="titulo"
+                elif atributo_n=='a':
+                    atributo="anho"
                 elif atributo_n=='c':
                     atributo="caratula"
                 elif atributo_n=='u':

@@ -8,6 +8,7 @@ class PeliculasDB:
         self.cur.execute("""CREATE TABLE IF NOT EXISTS peliculas(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             titulo TEXT,
+            anho TEXT,
             caratula TEXT,
             ubicacion TEXT
             )""")
@@ -29,7 +30,7 @@ class PeliculasDB:
     
     def insertar_datos(self,pelicula):
         cur = self.cnn.cursor()
-        cur.execute("""INSERT OR IGNORE INTO peliculas VALUES(NULL,?,?,?)""",pelicula)
+        cur.execute("""INSERT OR IGNORE INTO peliculas VALUES(NULL,?,?,?,?)""",pelicula)
         n = cur.rowcount
         self.cnn.commit()
         cur.close()

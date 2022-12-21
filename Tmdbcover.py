@@ -13,13 +13,13 @@ busqueda = movie.search('una noche en la opera')
 
 for peli in busqueda:
     anho = peli.release_date[:4]
-
+    try:
+        caratula_link = 'https://image.tmdb.org/t/p/w200'+peli.poster_path
+    except:
+        caratula_link = "sin caratula"
     print(peli.title+" "+anho)
     print(peli.overview)
-    try:
-        print('https://image.tmdb.org/t/p/w200'+peli.poster_path)
-    except:
-        print("sin caratula")
+    print(caratula_link)        
 
 #peli = busqueda[1]
 #anho = peli.release_date[:4]

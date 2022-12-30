@@ -31,10 +31,11 @@ db = PeliculasDB()
 
 ayuda="""
 (I) Insertar Pelicula
+(V) Insertar Varias
 (E) Eliminar Pelicula
 (M) Modificar Pelicula
 (B) Buscar Pelicula
-(L) Listar Peliculas
+(L) Listar Películas
 (Q) Salir
 """
 
@@ -59,14 +60,14 @@ def main():
             print("***  Insertar Pelicula  ***\n")
             titulo=input("Titulo de la Pelicula: ")
             anho=input("Año de la Pelicula: ")
-            caratula=input("Ubicacion y nombre de la cartula: ")
+            caratula=input("Ubicacion y nombre de la caratula: ")
             ubicacion=input("Ubicacion de la Pelicula: ")
             pelicula=(titulo,anho,caratula,ubicacion)
             n = db.insertar_datos(pelicula)
             if n==0:
                 print("Imposible Añadir Pelicula\n")
             else:
-                print("Pelicula Añadida con exito!!!\n")
+                print("Pelicula Añadida con éxito!!!\n")
         
         elif opcion == 'B':
             print("***  Buscar Pelicula  ***\n")
@@ -80,7 +81,7 @@ def main():
             peli=int(input("Id de la Pelicula a Modificar: "))
             atributo_n=0
             while atributo_n != 't' and atributo_n != 'c' and atributo_n != 'u' and atributo_n != 'a':
-                atributo_n=input("que parametro vas a Modificar ( 't'titulo, 'c'caratula, 'a'año, 'u'ubicacion):")
+                atributo_n=input("que parámetro vas a Modificar ( 't'titulo, 'c'caratula, 'a'año, 'u'ubicacion):")
                 if atributo_n=='t':
                     atributo="titulo"
                 elif atributo_n=='a':
@@ -90,13 +91,13 @@ def main():
                 elif atributo_n=='u':
                     atributo="ubicacion"
                 else:
-                    print("Parametro no valido elije otro!! ")
+                    print("Parámetro no valido elije otro!! ")
             valor=input("Nuevo Valor: ")
             n = db.editar_pelicula(atributo,valor,peli)
             if n==0:
                 print("Imposible Modificar Pelicula comprobar Id\n")
             else:
-                print("Pelicula Modificada con exito!!!\n")
+                print("Pelicula Modificada con éxito!!!\n")
                             
 
         elif opcion == 'E':
@@ -106,7 +107,21 @@ def main():
             if n==0:
                 print("Id no Existe\n")
             else:
-                print("Pelicula Borrada con exito!!!\n")
+                print("Pelicula Borrada con éxito!!!\n")
+                
+        elif opcion == 'V':
+            print('*** Insertar Varias Películas ***\n')
+            atributo_n=''
+            ubicacion = input("Ubicacion donde están las Películas: ")
+            while atributo_n != 'N':
+                titulo=input("Titulo de la Pelicula: ")
+                pelicula=(titulo,'','',ubicacion)
+                n = db.insertar_datos(pelicula)
+                if n==0:
+                    print("Imposible Añadir Pelicula\n")
+                else:
+                    print("Pelicula Añadida con éxito!!!\n")
+                atributo_n = input("Otra: ").upper()
         
         else:
             print("***Opcion no Soportada***\n")

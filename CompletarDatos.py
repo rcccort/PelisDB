@@ -32,7 +32,7 @@ def Buscar_Online(id, titulo):
         eleccion = int(input("elije pelicula : "))
         if opcion == 'G':
             Guardar_Imagen("https://image.tmdb.org/t/p/w200"+busqueda[eleccion].poster_path, str(id) + busqueda[eleccion].poster_path[-4:])
-            Completar_Datos(str(busqueda[eleccion].release_date[:4]), 'pelis/'+str(id) + busqueda[eleccion].poster_path[-4:],id)
+            Completar_Datos(busqueda[eleccion].title, str(busqueda[eleccion].release_date[:4]), 'pelis/'+str(id) + busqueda[eleccion].poster_path[-4:],id)
         elif opcion == 'V':
             Ver_Imagen("https://image.tmdb.org/t/p/w200"+busqueda[eleccion].poster_path)
         else:
@@ -53,11 +53,11 @@ def Ver_Imagen(url):
     photo = Image.open(response.raw)
     photo.show()
 
-def Completar_Datos(anho, caratula, id):
+def Completar_Datos(titulo, anho, caratula, id):
     
     db.editar_pelicula("anho", anho, id)
     db.editar_pelicula("caratula", caratula, id)
-
+    db.editar_pelicula("titulo", titulo, id)
 
 datos = db.consulta_peliculas()
 

@@ -121,7 +121,7 @@ def main():
                     print("Imposible Añadir Pelicula\n")
                 else:
                     print("Pelicula Añadida con éxito!!!\n")
-                atributo_n = input("Otra: ").upper()
+                atributo_n = input("Otra (S o N): ").upper()
         
         else:
             print("***Opcion no Soportada***\n")

@@ -33,7 +33,14 @@ def Buscar_Online(id, titulo):
         #print(peli.overview)
         print(caratula_link)
         elec=elec+1
-    opcion = "V"
+    if elec == 1:
+        opcion = "G"
+        eleccion = 0
+        Guardar_Imagen("https://image.tmdb.org/t/p/w200"+busqueda[eleccion].poster_path, str(id) + busqueda[eleccion].poster_path[-4:])
+        Completar_Datos(busqueda[eleccion].title, str(busqueda[eleccion].release_date[:4]), 'pelis/'+str(id) + busqueda[eleccion].poster_path[-4:],id)
+    else:
+        opcion = "V"
+        
     while opcion != 'G':
         opcion = input("Elige V o G para ver o guardar: ").upper()
         eleccion = int(input("elije pelicula : "))

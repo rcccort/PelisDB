@@ -9,7 +9,7 @@ base.debug = True
 
 movie = Movie()
 
-busqueda = movie.search('una noche en la opera')
+busqueda = movie.search('gataka')
 
 for peli in busqueda:
     anho = peli.release_date[:4]

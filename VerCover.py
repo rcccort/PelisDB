@@ -13,6 +13,6 @@ photo = Image.open(response.raw)
 #label = tk.Label(image=photo).pack()
 
 #root.mainloop()
-photo.save('pelis/imagen.jpg')
+#photo.save('pelis/imagen.jpg')
 
 photo.show()

@@ -4,6 +4,13 @@ import requests
 from PIL import Image
 
 db = PeliculasDB()
+
+# tmdbv3api necesita una api key por lo que hay que 
+# registrarse en https://www.themoviedb.org/account/signup 
+# para consegirla y despues: 
+# o bien se añade la linea "base.api_key = 'YOUR_API_KEY'" 
+# o se pone como variable del sistema con "export TMDB_API_KEY='YOUR_API_KEY'"
+
 base=TMDb()
 base.language = "es-ES"
 base.debug = True

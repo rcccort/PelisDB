@@ -18,7 +18,7 @@ base.debug = True
 
 def Buscar_Online(id, titulo):
     
-    print("buscando "+titulo+" ...")
+    print("buscando "+titulo+" ...\n")
     movie = Movie()
     busqueda = movie.search(titulo)
     elec=0
@@ -31,7 +31,7 @@ def Buscar_Online(id, titulo):
         print(str(elec))
         print(peli.title+" "+anho)
         #print(peli.overview)
-        print(caratula_link)
+        print(caratula_link+"\n")
         elec=elec+1
     if elec == 1:
         opcion = "G"
@@ -44,6 +44,7 @@ def Buscar_Online(id, titulo):
     while opcion != 'G':
         opcion = input("Elige V o G para ver o guardar: ").upper()
         eleccion = int(input("elije pelicula : "))
+        print("\n")
         if opcion == 'G':
             Guardar_Imagen("https://image.tmdb.org/t/p/w200"+busqueda[eleccion].poster_path, str(id) + busqueda[eleccion].poster_path[-4:])
             Completar_Datos(busqueda[eleccion].title, str(busqueda[eleccion].release_date[:4]), 'pelis/'+str(id) + busqueda[eleccion].poster_path[-4:],id)
@@ -54,7 +55,7 @@ def Buscar_Online(id, titulo):
 
 def Guardar_Imagen(link, imagen):
     
-    print("Guardando "+link+" en "+imagen)
+    print("Guardando "+link+" en "+imagen+"\n")
     response = requests.get(link, stream=True)
     response.raw.decode_content = True
     photo = Image.open(response.raw)

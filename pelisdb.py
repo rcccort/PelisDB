@@ -63,3 +63,10 @@ class PeliculasDB:
         self.cnn.commit()
         cur.close()
         return n
+    
+    def consulta_indibidual(self,id):
+        cur=self.cnn.cursor()
+        cur.execute("SELECT * FROM peliculas WHERE id = '{}'".format(id))
+        dato = cur.fetchone()
+        cur.close()
+        return dato

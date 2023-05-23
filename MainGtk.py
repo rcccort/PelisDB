@@ -45,18 +45,19 @@ class MyWin(Gtk.Window):
         hb.props.title = "Pelis"
         self.set_titlebar(hb)
         
-        button = Gtk.Button()
-        icon = Gio.ThemedIcon(name="system-shutdown-symbolic")
-        image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
-        button.add(image)
-        hb.pack_start(button)
-        button.connect("clicked", Gtk.main_quit)
-        
         busqueda = Gtk.SearchEntry()
         busqueda.set_text("Titulo")
         busqueda.connect("event", self.borrar_entry)
         busqueda.connect("activate", self.buscar_pelicula)
         hb.add(busqueda)
+        
+        button = Gtk.Button()
+        #icon = Gio.ThemedIcon(name="system-shutdown-symbolic")
+        icon = Gio.ThemedIcon(name="list-add-symbolic")
+        image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
+        button.add(image)
+        hb.pack_start(button)
+        button.connect("clicked", Gtk.main_quit)
         
         self.scrolled = Gtk.ScrolledWindow()
         self.scrolled.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)

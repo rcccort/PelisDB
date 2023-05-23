@@ -1,7 +1,7 @@
 import gi
 
 gi.require_version("Gtk","3.0")
-from gi.repository import Gtk
+from gi.repository import Gtk, Gio
 
 class win2(Gtk.Window):
     
@@ -16,6 +16,13 @@ class win2(Gtk.Window):
         hb.set_show_close_button(True)
         hb.props.title = self.pelicula[1]
         self.set_titlebar(hb)
+        
+        button = Gtk.Button()
+        icon = Gio.ThemedIcon(name="search-symbolic")
+        image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
+        button.add(image)
+        hb.pack_start(button)
+        button.connect("clicked", Gtk.main_quit)
         
         box = Gtk.Box(spacing=10)
         self.add(box)
@@ -77,7 +84,7 @@ class win2(Gtk.Window):
         vbox.add(sitio_label)
         vbox.add(sitio_entry)
         
-        sitio_entry.grab_focus()
+        #sitio_entry.grab_focus()
         
                 
         self.show_all()

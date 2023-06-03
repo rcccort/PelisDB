@@ -19,5 +19,5 @@ para conseguirla y después:
 
 ### Requerimientos:
 
-pip install PyGObject
-pip install tmdbv3api
+* pip install PyGObject
+* pip install tmdbv3api

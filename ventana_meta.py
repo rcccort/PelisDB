@@ -1,10 +1,17 @@
 import gi
+from comfiguracion import Comfiguracion
 from pelisdb import PeliculasDB
 from tmdbv3api import TMDb, Movie
 import requests
 from PIL import Image
 
-db = PeliculasDB()
+APP = "pelisdb"
+config = f"{APP}.conf"
+config_base = {'ultimo_lugar':'Carpeta 1','dir_caratulas':'pelis'}
+
+cf = Comfiguracion(APP, config, config_base)
+
+db = PeliculasDB(cf.get_dir())
 
 base=TMDb()
 base.language = "es-ES"
@@ -13,7 +20,7 @@ base.debug = True
 gi.require_version("Gtk","3.0")
 from gi.repository import Gtk, Gio
 
-class win3(Gtk.Window):
+class VentanaMeta(Gtk.Window):
     
     def __init__(self, pelicula):
         super().__init__()
@@ -86,7 +93,7 @@ class win3(Gtk.Window):
             photo.save(link2)
             image.set_from_file(link2)
         else:
-            image.set_from_file(link)
+            image.set_from_file(str(cf.get_dir() / link))
         
         label = Gtk.Label()
         label.set_markup('<span size="x-large"><b>'+Peli[1]+'\n'+Peli[2]+'</b></span>')
@@ -113,7 +120,7 @@ class win3(Gtk.Window):
             response = requests.get(link, stream=True)
             response.raw.decode_content = True
             photo = Image.open(response.raw)
-            photo.save('pelis/'+imagen)
+            photo.save(str(cf.get_dir())+'/pelis/'+imagen)
     
     def Boton_Pulsado(self, event):
         if self.check != '':    

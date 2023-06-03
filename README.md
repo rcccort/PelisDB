@@ -21,3 +21,4 @@ para conseguirla y después:
 
 * pip install PyGObject
 * pip install tmdbv3api
+* pip install toml

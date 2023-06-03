@@ -1,15 +1,22 @@
 import gi
+from comfiguracion import Comfiguracion
 from pelisdb import PeliculasDB
-from VentanaMeta import win3
-from VentanaEdicion import win4
+from ventana_meta import VentanaMeta
+from ventana_edicion import VentanaEdicion
 
 gi.require_version("Gtk","3.0")
 from gi.repository import Gtk, Gio
 
-db = PeliculasDB()
+APP = "pelisdb"
+config = f"{APP}.conf"
+config_base = {'ultimo_lugar':'Carpeta 1','dir_caratulas':'pelis'}
+
+cf = Comfiguracion(APP, config, config_base)
+
+db = PeliculasDB(cf.get_dir())
 
 
-class win2(Gtk.Window):
+class VentanaInfo(Gtk.Window):
     
     def __init__(self, pelicula):
         super().__init__()
@@ -48,9 +55,9 @@ class win2(Gtk.Window):
         self.add(box)
         
         if self.pelicula[3] == "":
-            caratula="pelis/sin_caratula.jpg"
+            caratula=str(cf.get_dir() / "pelis/sin_caratula.jpg")
         else:
-            caratula=self.pelicula[3]    
+            caratula=str(cf.get_dir() / self.pelicula[3])    
         
         image = Gtk.Image()
         image.set_from_file(caratula)
@@ -91,11 +98,11 @@ class win2(Gtk.Window):
         self.show_all()
 
     def completar(self, button):
-        window = win3(self.pelicula)
+        window = VentanaMeta(self.pelicula)
         self.destroy()
         
     def editar(self, widget):
-        win4(self.pelicula, self.pelicula[4])
+        VentanaEdicion(self.pelicula, self.pelicula[4])
         self.destroy()
     
     def borrar(self, widget):

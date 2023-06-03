@@ -2,16 +2,35 @@
 # -*- coding: utf-8 -*-
 
 from pelisdb import PeliculasDB
-from VentanaInfo import win2
-from VentanaEdicion import win4
-from VentanaMeta import win3
+from ventana_info import VentanaInfo
+from ventana_meta import VentanaMeta
+from ventana_edicion import VentanaEdicion
+from comfiguracion import Comfiguracion
+from shutil import copy
 import gi
+import os
 
 gi.require_version("Gtk","3.0")
 from gi.repository import Gtk, Gio, Gdk, GdkPixbuf
-db = PeliculasDB()
 
-class MyWin(Gtk.Window):
+APP = "pelisdb"
+config = f"{APP}.conf"
+config_base = {'ultimo_lugar':'Carpeta 1','dir_caratulas':'pelis'}
+
+cf = Comfiguracion(APP, config, config_base)
+
+caratulas_dir = cf.get_dir() / 'pelis'
+if not caratulas_dir.exists():
+    os.makedirs(caratulas_dir)
+    copy('sin_caratula.jpg', caratulas_dir / 'sin_caratula.jpg')
+
+db = PeliculasDB(cf.get_dir())
+
+#base = cf.read_conf()
+#base['opcion3'] = 'Opcion 3'
+#cf.escribir_datos(base)
+
+class VentanaPrincipal(Gtk.Window):
     
     def __init__(self):
         super().__init__()
@@ -62,8 +81,8 @@ class MyWin(Gtk.Window):
         self.add(self.scrolled)
         
     def anadir_pelicula(self, widget):
-        eleccion_anterior='Carpeta 1'
-        ventana4=win4('',eleccion_anterior)
+        eleccion_anterior = cf.read_conf()['ultimo_lugar']
+        ventana4=VentanaEdicion('',eleccion_anterior)
         ventana4.connect("destroy", self.refrescar)
         #self.refrescar(widget)
                                                                        
@@ -71,7 +90,7 @@ class MyWin(Gtk.Window):
         print("Boton "+widget.get_name()+" Pulsado")
         id = db.consulta_indibidual(int(widget.get_name()))
         print(id)
-        ventana2=win2(id)
+        ventana2=VentanaInfo(id)
         self.refrescar(widget)
         #ventana2.show_all()
             
@@ -114,16 +133,16 @@ class MyWin(Gtk.Window):
             button = Gtk.Button()
             button.set_name(str(peli[0]))
             if peli[3] != "":
-                button.set_image(self.redimensionar_imagen(peli[3]))
+                button.set_image(self.redimensionar_imagen(str(cf.get_dir() / peli[3])))
             else:
-                button.set_image(self.redimensionar_imagen("pelis/sin_caratula.jpg"))
+                button.set_image(self.redimensionar_imagen(str(cf.get_dir() / "pelis/sin_caratula.jpg")))
             button.connect("clicked", self.pulsar_boton)
             box.add(button)
     
     def actulizar_metadatos(self, widget):
         for peli in db.consulta_peliculas():
             if peli[3] == '':
-                win3(peli)
+                VentanaMeta(peli)
         self.refrescar(widget)
     
     def refrescar(self, button):
@@ -159,7 +178,7 @@ class MyWin(Gtk.Window):
         
 if __name__=='__main__':
     
-    win = MyWin()
+    win = VentanaPrincipal()
     win.connect("destroy", Gtk.main_quit)
     win.show_all()
     Gtk.main()

@@ -1,12 +1,19 @@
 import gi
+from comfiguracion import Comfiguracion
 from pelisdb import PeliculasDB
 
-db = PeliculasDB()
+APP = "pelisdb"
+config = f"{APP}.conf"
+config_base = {'ultimo_lugar':'Carpeta 1','dir_caratulas':'pelis'}
+
+cf = Comfiguracion(APP, config, config_base)
+
+db = PeliculasDB(cf.get_dir())
 
 gi.require_version("Gtk","3.0")
 from gi.repository import Gtk, Gio
 
-class win4(Gtk.Window):
+class VentanaEdicion(Gtk.Window):
     
     def __init__(self, pelicula, ultima):
         super().__init__()
@@ -103,6 +110,9 @@ class win4(Gtk.Window):
                 n = db.insertar_datos(pelicula)
                 if n==0:
                     print("Imposible Añadir Pelicula\n")
+                    dato = cf.read_conf()
+                    dato['ultimo_lugar'] = sitio
+                    cf.escribir_datos(dato)
                 else:
                     print("Pelicula Añadida con éxito!!!\n")
                 self.destroy()
@@ -131,6 +141,9 @@ class win4(Gtk.Window):
             elif pelicula[3] != pelicula_db[4]:
                 print("editamos sitio")
                 db.editar_pelicula('ubicacion', pelicula[3], self.pelicula[0])
+                dato = cf.read_conf()
+                dato['ultimo_lugar'] = sitio
+                cf.escribir_datos(dato)
             else:
                 print("no se edita nada")
                 

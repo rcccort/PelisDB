@@ -1,9 +1,10 @@
 import sqlite3
+from pathlib import Path
 
 class PeliculasDB:
     
-    def __init__(self):
-        self.cnn = sqlite3.connect('pelisdb.db')
+    def __init__(self, directorio):
+        self.cnn = sqlite3.connect(Path(directorio) / 'pelisdb.db')
         self.cur = self.cnn.cursor()
         self.cur.execute("""CREATE TABLE IF NOT EXISTS peliculas(
             id INTEGER PRIMARY KEY AUTOINCREMENT,

@@ -19,7 +19,7 @@ config_base = {'ultimo_lugar':'Carpeta 1','dir_caratulas':'pelis'}
 
 cf = Comfiguracion(APP, config, config_base)
 
-caratulas_dir = cf.get_dir() / 'pelis'
+caratulas_dir = cf.get_dir() / cf.read_conf()['dir_caratulas']
 if not caratulas_dir.exists():
     os.makedirs(caratulas_dir)
     copy('sin_caratula.jpg', caratulas_dir / 'sin_caratula.jpg')

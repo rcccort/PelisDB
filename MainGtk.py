@@ -1,6 +1,10 @@
+#! /bin/python3
+# -*- coding: utf-8 -*-
 
 from pelisdb import PeliculasDB
 from VentanaInfo import win2
+from VentanaEdicion import win4
+from VentanaMeta import win3
 import gi
 
 gi.require_version("Gtk","3.0")
@@ -17,33 +21,17 @@ class MyWin(Gtk.Window):
         
         pelis = db.consulta_peliculas()
         
-        #imagenes = []
-        #
-        #for peli in pelis:
-        #    if peli[3] != "":
-        #        imagenes.append(peli[3])
-        #    else:
-        #        imagenes.append("pelis/1.jpg")
-        
-        #imagenes = [
-        #    "pelis/57.jpg",
-        #    "pelis/58.jpg",
-        #    "pelis/59.jpg",
-        #    "pelis/60.jpg",
-        #    "pelis/61.jpg",
-        #    "pelis/62.jpg",
-        #    "pelis/63.jpg",
-        #    "pelis/64.jpg",
-        #    "pelis/65.jpg",
-        #    "pelis/66.jpg",
-        #    "pelis/67.jpg",
-        #    "pelis/68.jpg"
-        #]
-        
         hb = Gtk.HeaderBar()
         hb.set_show_close_button(True)
         hb.props.title = "Pelis"
         self.set_titlebar(hb)
+        
+        button = Gtk.Button()
+        icon = Gio.ThemedIcon(name="system-restart-symbolic")
+        image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
+        button.add(image)
+        hb.pack_start(button)
+        button.connect("clicked", self.actulizar_metadatos)
         
         busqueda = Gtk.SearchEntry()
         busqueda.set_text("Titulo")
@@ -57,7 +45,7 @@ class MyWin(Gtk.Window):
         image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
         button.add(image)
         hb.pack_start(button)
-        button.connect("clicked", Gtk.main_quit)
+        button.connect("clicked", self.anadir_pelicula)
         
         self.scrolled = Gtk.ScrolledWindow()
         self.scrolled.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
@@ -73,31 +61,18 @@ class MyWin(Gtk.Window):
 
         self.add(self.scrolled)
         
-        #box = Gtk.Box()
-        #self.add(box)    
-        
-        #button = Gtk.Button()
-        #button.connect("clicked", self.pulsar_boton)
-        #box.add(button)
-        #button2 = Gtk.Button()
-        #button2.connect("clicked", self.pulsar_boton)
-        #box.add(button2)
-        #
-        #self.imagen = Gtk.Image()
-        #self.imagen.set_from_file("pelis/68.jpg")
-        #button.set_name("68")
-        #button.set_image(self.imagen)
-        #self.imagen2 = Gtk.Image()
-        #self.imagen2.set_from_file("pelis/67.jpg")
-        #button2.set_name("67")
-        #button2.set_image(self.imagen2)
-        
-                                                               
+    def anadir_pelicula(self, widget):
+        eleccion_anterior='Carpeta 1'
+        ventana4=win4('',eleccion_anterior)
+        ventana4.connect("destroy", self.refrescar)
+        #self.refrescar(widget)
+                                                                       
     def pulsar_boton(self, widget):
         print("Boton "+widget.get_name()+" Pulsado")
         id = db.consulta_indibidual(int(widget.get_name()))
         print(id)
         ventana2=win2(id)
+        self.refrescar(widget)
         #ventana2.show_all()
             
     def borrar_entry(self, busqueda, event):
@@ -144,6 +119,19 @@ class MyWin(Gtk.Window):
                 button.set_image(self.redimensionar_imagen("pelis/sin_caratula.jpg"))
             button.connect("clicked", self.pulsar_boton)
             box.add(button)
+    
+    def actulizar_metadatos(self, widget):
+        for peli in db.consulta_peliculas():
+            if peli[3] == '':
+                win3(peli)
+        self.refrescar(widget)
+    
+    def refrescar(self, button):
+        resultado=db.consulta_peliculas()
+        self.scrolled.remove(self.flowbox)
+        self.crear_flowbox(self.flowbox, resultado)
+        self.scrolled.add(self.flowbox)
+        self.scrolled.show_all()
 
 #class win2(Gtk.Window):
 #    

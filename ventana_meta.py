@@ -120,13 +120,18 @@ class VentanaMeta(Gtk.Window):
             response = requests.get(link, stream=True)
             response.raw.decode_content = True
             photo = Image.open(response.raw)
-            photo.save(str(cf.get_dir())+'/pelis/'+imagen)
+            #photo.save(str(cf.get_dir())+'/pelis/'+imagen)
+            photo.save(str(cf.get_dir())+'/'+cf.read_conf()['dir_caratulas']+'/'+imagen)
     
     def Boton_Pulsado(self, event):
         if self.check != '':    
+            #self.Completar_Datos(self.normalize(self.elccion[int(self.check)][1]),
+            #                     self.elccion[int(self.check)][2],
+            #                     "pelis/"+str(self.pelicula[0])+self.elccion[int(self.check)][3][-4:],
+            #                     self.pelicula[0])
             self.Completar_Datos(self.normalize(self.elccion[int(self.check)][1]),
                                  self.elccion[int(self.check)][2],
-                                 "pelis/"+str(self.pelicula[0])+self.elccion[int(self.check)][3][-4:],
+                                 cf.read_conf()['dir_caratulas']+"/"+str(self.pelicula[0])+self.elccion[int(self.check)][3][-4:],
                                  self.pelicula[0])
             self.Guardar_Imagen(self.elccion[int(self.check)][3],
                                 str(self.pelicula[0])+self.elccion[int(self.check)][3][-4:],

@@ -1,11 +1,5 @@
-certifi==2023.5.7
-charset-normalizer==3.1.0
-idna==3.4
 Pillow==9.5.0
-pkg_resources==0.0.0
 pycairo==1.23.0
 PyGObject==3.44.1
-requests==2.31.0
 tmdbv3api==1.7.7
 toml==0.10.2
-urllib3==2.0.2

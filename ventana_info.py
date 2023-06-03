@@ -119,6 +119,7 @@ class VentanaInfo(Gtk.Window):
         response = dialog.run()
         if response == Gtk.ResponseType.YES:
             print("Procediendo al borrado de la pelicula")
+            db.borrar_pelicula(self.pelicula[0])
             self.destroy()
         elif response == Gtk.ResponseType.NO:
             print("Abortando borrado de la pelicula")

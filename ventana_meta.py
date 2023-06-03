@@ -60,6 +60,31 @@ class VentanaMeta(Gtk.Window):
         
         movie = Movie()
         busqueda = movie.search(titulo)
+
+        if len(busqueda) == 1:
+            self.crear_lista(busqueda)
+            self.check='0'
+            self.Boton_Pulsado(None)
+            
+        else:
+            self.crear_lista(busqueda)
+            #elec=0
+            #for peli in busqueda:
+            #    anho = peli.release_date[:4]
+            #    try:
+            #        caratula_link = 'https://image.tmdb.org/t/p/w200'+peli.poster_path
+            #    except:
+            #        caratula_link = "pelis/sin_caratula.jpg"
+            #    #print(str(elec))
+            #    #print(peli.title+" "+anho)
+            #    #print(peli.overview)
+            #    #print(caratula_link+"\n")
+            #    pelicula=(elec, peli.title, anho, caratula_link)
+            #    self.elccion.append(pelicula)
+            #    elec=elec+1
+            #    self.Caja_Peli(pelicula)
+
+    def crear_lista(self, busqueda):
         elec=0
         for peli in busqueda:
             anho = peli.release_date[:4]
@@ -67,15 +92,11 @@ class VentanaMeta(Gtk.Window):
                 caratula_link = 'https://image.tmdb.org/t/p/w200'+peli.poster_path
             except:
                 caratula_link = "pelis/sin_caratula.jpg"
-            #print(str(elec))
-            #print(peli.title+" "+anho)
-            #print(peli.overview)
-            #print(caratula_link+"\n")
             pelicula=(elec, peli.title, anho, caratula_link)
             self.elccion.append(pelicula)
             elec=elec+1
-            self.Caja_Peli(pelicula)
-        
+            if len(busqueda) > 1:
+                self.Caja_Peli(pelicula)
     
     def Caja_Peli(self, Peli):
         #print(Peli)

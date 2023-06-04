@@ -91,6 +91,7 @@ class VentanaPrincipal(Gtk.Window):
         id = db.consulta_indibidual(int(widget.get_name()))
         print(id)
         ventana2=VentanaInfo(id)
+        ventana2.connect("destroy", self.refrescar)
         self.refrescar(widget)
         #ventana2.show_all()
             
@@ -142,7 +143,8 @@ class VentanaPrincipal(Gtk.Window):
     def actulizar_metadatos(self, widget):
         for peli in db.consulta_peliculas():
             if peli[3] == '':
-                VentanaMeta(peli)
+                ventana_meta = VentanaMeta(peli)
+                ventana_meta.connect("destroy", self.refrescar)
         self.refrescar(widget)
     
     def refrescar(self, button):

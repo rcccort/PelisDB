@@ -25,30 +25,30 @@ class VentanaInfo(Gtk.Window):
         self.set_default_size(400, 200)
         self.pelicula=pelicula
                 
-        hb = Gtk.HeaderBar()
-        hb.set_show_close_button(True)
-        hb.props.title = self.pelicula[1]
-        self.set_titlebar(hb)
+        self.hb = Gtk.HeaderBar()
+        self.hb.set_show_close_button(True)
+        self.hb.props.title = self.pelicula[1]
+        self.set_titlebar(self.hb)
         
         button = Gtk.Button()
         icon = Gio.ThemedIcon(name="search-symbolic")
         image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
         button.add(image)
-        hb.pack_start(button)
+        self.hb.pack_start(button)
         button.connect("clicked", self.completar)
         
         button2 = Gtk.Button()
         icon2 = Gio.ThemedIcon(name="document-edit-symbolic")
         image2 = Gtk.Image.new_from_gicon(icon2, Gtk.IconSize.BUTTON)
         button2.add(image2)
-        hb.pack_start(button2)
+        self.hb.pack_start(button2)
         button2.connect("clicked", self.editar)
         
         button3 = Gtk.Button()
         icon3 = Gio.ThemedIcon(name="edit-delete-symbolic")
         image3 = Gtk.Image.new_from_gicon(icon3, Gtk.IconSize.BUTTON)
         button3.add(image3)
-        hb.pack_start(button3)
+        self.hb.pack_start(button3)
         button3.connect("clicked", self.borrar)
         
         box = Gtk.Box(spacing=10)
@@ -68,11 +68,11 @@ class VentanaInfo(Gtk.Window):
         box.add(vbox)
 
         titulo_label = Gtk.Label()
-        titulo_entry = Gtk.Label()
+        self.titulo_entry = Gtk.Label()
         anho_label = Gtk.Label()
-        anho_entry = Gtk.Label()
+        self.anho_entry = Gtk.Label()
         sitio_label = Gtk.Label()
-        sitio_entry = Gtk.Label()
+        self.sitio_entry = Gtk.Label()
 
         titulo_label.set_label("Titulo:")
         titulo_label.set_xalign(0)
@@ -81,29 +81,40 @@ class VentanaInfo(Gtk.Window):
         sitio_label.set_label("Sitio:")
         sitio_label.set_xalign(0)
 
-        titulo_entry.set_markup('<span size="x-large"><b>'+str(self.pelicula[1])+'</b></span>')
-        anho_entry.set_markup('<span size="x-large"><b>'+str(self.pelicula[2])+'</b></span>')
-        sitio_entry.set_markup('<span size="x-large"><b>'+str(self.pelicula[4])+'</b></span>')
-        titulo_entry.set_xalign(0)
-        anho_entry.set_xalign(0)
-        sitio_entry.set_xalign(0)
+        self.titulo_entry.set_markup('<span size="x-large"><b>'+str(self.pelicula[1])+'</b></span>')
+        self.anho_entry.set_markup('<span size="x-large"><b>'+str(self.pelicula[2])+'</b></span>')
+        self.sitio_entry.set_markup('<span size="x-large"><b>'+str(self.pelicula[4])+'</b></span>')
+        self.titulo_entry.set_xalign(0)
+        self.anho_entry.set_xalign(0)
+        self.sitio_entry.set_xalign(0)
 
         vbox.add(titulo_label)
-        vbox.add(titulo_entry)
+        vbox.add(self.titulo_entry)
         vbox.add(anho_label)
-        vbox.add(anho_entry)
+        vbox.add(self.anho_entry)
         vbox.add(sitio_label)
-        vbox.add(sitio_entry)
+        vbox.add(self.sitio_entry)
 
         self.show_all()
+        
+    def destruir(self, widget):
+        self.destroy()
+
+    def refrescar(self, widget):
+        pelicula = db.consulta_indibidual(self.pelicula[0])
+        self.hb.props.title = pelicula[1]
+        self.titulo_entry.set_markup('<span size="x-large"><b>'+str(pelicula[1])+'</b></span>')
+        self.anho_entry.set_markup('<span size="x-large"><b>'+str(pelicula[2])+'</b></span>')
+        self.sitio_entry.set_markup('<span size="x-large"><b>'+str(pelicula[4])+'</b></span>')
+        self.pelicula = pelicula
 
     def completar(self, button):
         window = VentanaMeta(self.pelicula)
-        self.destroy()
+        window.connect("destroy", self.destruir)
         
     def editar(self, widget):
-        VentanaEdicion(self.pelicula, self.pelicula[4])
-        self.destroy()
+        window = VentanaEdicion(self.pelicula, self.pelicula[4])
+        window.connect('destroy', self.refrescar)
     
     def borrar(self, widget):
         dialog = Gtk.MessageDialog(

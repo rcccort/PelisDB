@@ -129,22 +129,27 @@ class VentanaEdicion(Gtk.Window):
                         sitio)
             pelicula_db = db.consulta_indibidual(self.pelicula[0])
             
+            action = True
             if pelicula[0] != pelicula_db[1]:
                 print("editamos titulo")
                 db.editar_pelicula('titulo', pelicula[0], self.pelicula[0])
-            elif pelicula[1] != pelicula_db[2]:
+                action = False
+            if pelicula[1] != pelicula_db[2]:
                 print("editamos año")
                 db.editar_pelicula('anho', pelicula[1], self.pelicula[0])
-            elif pelicula[2] != pelicula_db[3]:
+                action = False
+            if pelicula[2] != pelicula_db[3]:
                 print("editamos caratula")
                 db.editar_pelicula('caratula', pelicula[2], self.pelicula[0])
-            elif pelicula[3] != pelicula_db[4]:
+                action = False
+            if pelicula[3] != pelicula_db[4]:
                 print("editamos sitio")
                 db.editar_pelicula('ubicacion', pelicula[3], self.pelicula[0])
                 dato = cf.read_conf()
                 dato['ultimo_lugar'] = sitio
                 cf.escribir_datos(dato)
-            else:
+                action = False
+            if action:
                 print("no se edita nada")
                 
     def llenar_store(self):

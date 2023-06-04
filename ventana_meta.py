@@ -65,6 +65,11 @@ class VentanaMeta(Gtk.Window):
             self.crear_lista(busqueda)
             self.check='0'
             self.Boton_Pulsado(None)
+        
+        elif len(busqueda) == 0:
+            print('No Encontro nada')
+            self.mesaje_error()
+            self.destroy()
             
         else:
             self.crear_lista(busqueda)
@@ -83,18 +88,40 @@ class VentanaMeta(Gtk.Window):
             #    self.elccion.append(pelicula)
             #    elec=elec+1
             #    self.Caja_Peli(pelicula)
+    
+    def mesaje_error(self):
+        dialog = Gtk.MessageDialog(
+            transient_for=self,
+            flags=0,
+            message_type=Gtk.MessageType.INFO,
+            buttons=Gtk.ButtonsType.OK,
+            text="No Hay Coincidencias!!",
+        )
+        dialog.format_secondary_text(
+            "Prueve a cambiar el titulo de la pelicula"
+        )
+        dialog.run()
 
+        dialog.destroy()
+    
     def crear_lista(self, busqueda):
         elec=0
         for peli in busqueda:
+            
+            if elec == 5:
+                break
+            
             anho = peli.release_date[:4]
+            
             try:
                 caratula_link = 'https://image.tmdb.org/t/p/w200'+peli.poster_path
             except:
                 caratula_link = "pelis/sin_caratula.jpg"
+            
             pelicula=(elec, peli.title, anho, caratula_link)
             self.elccion.append(pelicula)
             elec=elec+1
+            
             if len(busqueda) > 1:
                 self.Caja_Peli(pelicula)
     

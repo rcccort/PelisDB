@@ -1,10 +1,13 @@
+#! /bin/python3
+# -*- coding: utf-8 -*-
+
 import gi
 from comfiguracion import Comfiguracion
 from pelisdb import PeliculasDB
 
 APP = "pelisdb"
 config = f"{APP}.conf"
-config_base = {'ultimo_lugar':'Carpeta 1','dir_caratulas':'pelis'}
+config_base = {'ultimo_lugar':'Carpeta 1', 'dir_caratulas':'pelis', 'tmdb_api_key':''}
 
 cf = Comfiguracion(APP, config, config_base)
 
@@ -28,7 +31,7 @@ class VentanaEdicion(Gtk.Window):
         if self.pelicula != '':
             hb.props.title = 'Modificar Película'
         else:
-            hb.props.title = 'Añadir Pelicula'
+            hb.props.title = 'Añadir Película'
         
         self.set_titlebar(hb)
         

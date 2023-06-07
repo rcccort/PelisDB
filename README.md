@@ -16,6 +16,7 @@ registrarse en https://www.themoviedb.org/account/signup
 para conseguirla y después: 
 * o bien se añade la linea "base.api_key = 'YOUR_API_KEY'" 
 * o se pone como variable del sistema con "export TMDB_API_KEY='YOUR_API_KEY'"
+* y ahora también puede añadirla al archivo de configuración ~/.config/pelisdb/pelisdb.conf
 
 ### Requerimientos:
 

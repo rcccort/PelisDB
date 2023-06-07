@@ -1,3 +1,6 @@
+#! /bin/python3
+# -*- coding: utf-8 -*-
+
 import gi
 from comfiguracion import Comfiguracion
 from pelisdb import PeliculasDB
@@ -9,7 +12,7 @@ from gi.repository import Gtk, Gio
 
 APP = "pelisdb"
 config = f"{APP}.conf"
-config_base = {'ultimo_lugar':'Carpeta 1','dir_caratulas':'pelis'}
+config_base = {'ultimo_lugar':'Carpeta 1', 'dir_caratulas':'pelis', 'tmdb_api_key':''}
 
 cf = Comfiguracion(APP, config, config_base)
 

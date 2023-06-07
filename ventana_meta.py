@@ -1,3 +1,6 @@
+#! /bin/python3
+# -*- coding: utf-8 -*-
+
 import gi
 from comfiguracion import Comfiguracion
 from pelisdb import PeliculasDB
@@ -7,7 +10,7 @@ from PIL import Image
 
 APP = "pelisdb"
 config = f"{APP}.conf"
-config_base = {'ultimo_lugar':'Carpeta 1','dir_caratulas':'pelis'}
+config_base = {'ultimo_lugar':'Carpeta 1', 'dir_caratulas':'pelis', 'tmdb_api_key':''}
 
 cf = Comfiguracion(APP, config, config_base)
 
@@ -28,6 +31,23 @@ class VentanaMeta(Gtk.Window):
         self.set_border_width(10)
         self.set_default_size(400, 500)
         self.pelicula=pelicula
+        
+        if cf.read_conf()['tmdb_api_key'] == '':
+            dialog = Gtk.MessageDialog(
+                transient_for=self,
+                flags=0,
+                message_type=Gtk.MessageType.INFO,
+                buttons=Gtk.ButtonsType.OK,
+                text="Falta Clave para TMDB!!",
+            )
+            dialog.format_secondary_text(
+                "edite archivo pelisdb.conf para añadirla"
+            )
+            dialog.run()
+
+            dialog.destroy()
+        else:
+            base.api_key = cf.read_conf()['tmdb_api_key']
                 
         hb = Gtk.HeaderBar()
         hb.set_show_close_button(True)
@@ -67,7 +87,7 @@ class VentanaMeta(Gtk.Window):
             self.Boton_Pulsado(None)
         
         elif len(busqueda) == 0:
-            print('No Encontro nada')
+            print('No Encontró nada')
             self.mesaje_error()
             self.destroy()
             
@@ -98,7 +118,7 @@ class VentanaMeta(Gtk.Window):
             text="No Hay Coincidencias!!",
         )
         dialog.format_secondary_text(
-            "Prueve a cambiar el titulo de la pelicula"
+            "Pruebe a cambiar el titulo de la pelicula"
         )
         dialog.run()
 

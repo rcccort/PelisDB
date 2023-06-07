@@ -15,7 +15,7 @@ from gi.repository import Gtk, Gio, Gdk, GdkPixbuf
 
 APP = "pelisdb"
 config = f"{APP}.conf"
-config_base = {'ultimo_lugar':'Carpeta 1','dir_caratulas':'pelis'}
+config_base = {'ultimo_lugar':'Carpeta 1', 'dir_caratulas':'pelis', 'tmdb_api_key':''}
 
 cf = Comfiguracion(APP, config, config_base)
 

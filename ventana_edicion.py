@@ -113,11 +113,11 @@ class VentanaEdicion(Gtk.Window):
                 n = db.insertar_datos(pelicula)
                 if n==0:
                     print("Imposible Añadir Pelicula\n")
+                else:
+                    print("Pelicula Añadida con éxito!!!\n")
                     dato = cf.read_conf()
                     dato['ultimo_lugar'] = sitio
                     cf.escribir_datos(dato)
-                else:
-                    print("Pelicula Añadida con éxito!!!\n")
                 self.destroy()
             else:
                 self.mesaje_error()
@@ -155,6 +155,8 @@ class VentanaEdicion(Gtk.Window):
             if action:
                 print("no se edita nada")
                 
+            self.destroy()
+            
     def llenar_store(self):
         
         peliculas = db.consulta_peliculas()

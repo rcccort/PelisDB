@@ -13,6 +13,7 @@ config = f"{APP}.conf"
 config_base = {'ultimo_lugar':'Carpeta 1', 'dir_caratulas':'pelis', 'tmdb_api_key':''}
 
 cf = Comfiguracion(APP, config, config_base)
+caratulas_dir = cf.read_conf()['dir_caratulas']
 
 db = PeliculasDB(cf.get_dir())
 
@@ -131,12 +132,15 @@ class VentanaMeta(Gtk.Window):
             if elec == 5:
                 break
             
-            anho = peli.release_date[:4]
+            try:
+                anho = peli.release_date[:4]
+            except:
+                anho = ""
             
             try:
                 caratula_link = 'https://image.tmdb.org/t/p/w200'+peli.poster_path
             except:
-                caratula_link = "pelis/sin_caratula.jpg"
+                caratula_link = str(caratulas_dir)+"/sin_caratula.jpg"
             
             pelicula=(elec, peli.title, anho, caratula_link)
             self.elccion.append(pelicula)
@@ -153,7 +157,7 @@ class VentanaMeta(Gtk.Window):
         link=Peli[3]
         
         image = Gtk.Image()
-        if link != 'pelis/sin_caratula.jpg':
+        if link != str(caratulas_dir)+"/sin_caratula.jpg":
             response = requests.get(Peli[3], stream=True)
             response.raw.decode_content = True
             photo = Image.open(response.raw)
@@ -182,7 +186,7 @@ class VentanaMeta(Gtk.Window):
     
     def Guardar_Imagen(self, link, imagen, check):
     
-        if link != "pelis/sin_caratula.jpg":
+        if link != str(caratulas_dir)+"/sin_caratula.jpg":
             #print(self.elccion[int(check)])
             #print("Guardando "+link+" en "+imagen+"\n")
             response = requests.get(link, stream=True)
@@ -211,7 +215,7 @@ class VentanaMeta(Gtk.Window):
         if id != "" and anho != "" and caratula != "" and titulo != "":    
             #print(str(id), titulo, anho, caratula)
             db.editar_pelicula("anho", anho, id)
-            if caratula != "pelis/sin_caratula.jpg":
+            if caratula != str(caratulas_dir)+"/sin_caratula.jpg":
                 #print("Esto tambien funciona")
                 db.editar_pelicula("caratula", caratula, id)
             db.editar_pelicula("titulo", titulo, id)

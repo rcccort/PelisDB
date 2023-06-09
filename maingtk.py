@@ -136,7 +136,7 @@ class VentanaPrincipal(Gtk.Window):
             if peli[3] != "":
                 button.set_image(self.redimensionar_imagen(str(cf.get_dir() / peli[3])))
             else:
-                button.set_image(self.redimensionar_imagen(str(cf.get_dir() / "pelis/sin_caratula.jpg")))
+                button.set_image(self.redimensionar_imagen(str(cf.get_dir() / caratulas_dir /"sin_caratula.jpg")))
             button.connect("clicked", self.pulsar_boton)
             box.add(button)
     

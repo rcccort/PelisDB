@@ -58,7 +58,7 @@ class VentanaInfo(Gtk.Window):
         self.add(box)
         
         if self.pelicula[3] == "":
-            caratula=str(cf.get_dir() / "pelis/sin_caratula.jpg")
+            caratula=str(cf.get_dir() / cf.read_conf()['dir_caratulas'] / "sin_caratula.jpg")
         else:
             caratula=str(cf.get_dir() / self.pelicula[3])    
         

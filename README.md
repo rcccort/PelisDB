@@ -7,7 +7,7 @@ base de datos para localizar donde guardo todo lo grabado en cd
 - [x] Añadir descarga de Imágenes (Programa a parte y completa database)
 - [x] Crear Gui en GTK
 
-<img title="" src="./captura.png" alt="" width="500">
+<img title="" src="./captura.png" alt="" width="600">
 
 ### Info:
 
@@ -27,3 +27,5 @@ para conseguirla y después:
 * pip install tmdbv3api
 * pip install toml
 * pip install Pillow
+
+añadido archivo **requirements.txt** para entornos virtuales.

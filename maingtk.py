@@ -140,11 +140,34 @@ class VentanaPrincipal(Gtk.Window):
             button.connect("clicked", self.pulsar_boton)
             box.add(button)
     
+#    def actulizar_metadatos(self, widget):
+#        for peli in db.consulta_peliculas():
+#            if peli[3] == '':
+#                ventana_meta = VentanaMeta(peli, cf)
+#                ventana_meta.connect("destroy", self.refrescar)
+#        self.refrescar(widget)
+
     def actulizar_metadatos(self, widget):
-        for peli in db.consulta_peliculas():
-            if peli[3] == '':
-                ventana_meta = VentanaMeta(peli, cf)
-                ventana_meta.connect("destroy", self.refrescar)
+        
+        def crear_lista():
+            for peli in db.consulta_peliculas():
+                if peli[3] == '':
+                    yield peli
+        
+        def abrir_ventana(pelicula):
+            ventana_meta = VentanaMeta(pelicula, cf)
+            ventana_meta.connect("destroy", siguiente)
+                        
+        def siguiente(widget):
+            try:
+                pelicula = next(peli)
+                abrir_ventana(pelicula)
+            except:
+                self.refrescar(None)
+            
+        peli = crear_lista()
+        siguiente(None)
+        
         self.refrescar(widget)
     
     def refrescar(self, button):

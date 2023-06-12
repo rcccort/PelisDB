@@ -82,7 +82,7 @@ class VentanaPrincipal(Gtk.Window):
         
     def anadir_pelicula(self, widget):
         eleccion_anterior = cf.read_conf()['ultimo_lugar']
-        ventana4=VentanaEdicion('',eleccion_anterior)
+        ventana4=VentanaEdicion('',eleccion_anterior, cf)
         ventana4.connect("destroy", self.refrescar)
         #self.refrescar(widget)
                                                                        
@@ -90,7 +90,7 @@ class VentanaPrincipal(Gtk.Window):
         print("Boton "+widget.get_name()+" Pulsado")
         id = db.consulta_indibidual(int(widget.get_name()))
         print(id)
-        ventana2=VentanaInfo(id)
+        ventana2=VentanaInfo(id, cf)
         ventana2.connect("destroy", self.refrescar)
         self.refrescar(widget)
         #ventana2.show_all()
@@ -143,7 +143,7 @@ class VentanaPrincipal(Gtk.Window):
     def actulizar_metadatos(self, widget):
         for peli in db.consulta_peliculas():
             if peli[3] == '':
-                ventana_meta = VentanaMeta(peli)
+                ventana_meta = VentanaMeta(peli, cf)
                 ventana_meta.connect("destroy", self.refrescar)
         self.refrescar(widget)
     

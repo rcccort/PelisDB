@@ -2,29 +2,29 @@
 # -*- coding: utf-8 -*-
 
 import gi
-from comfiguracion import Comfiguracion
+#from comfiguracion import Comfiguracion
 from pelisdb import PeliculasDB
 
-APP = "pelisdb"
-config = f"{APP}.conf"
-config_base = {'ultimo_lugar':'Carpeta 1', 'dir_caratulas':'pelis', 'tmdb_api_key':''}
+#APP = "pelisdb"
+#config = f"{APP}.conf"
+#config_base = {'ultimo_lugar':'Carpeta 1', 'dir_caratulas':'pelis', 'tmdb_api_key':''}
 
-cf = Comfiguracion(APP, config, config_base)
-
-db = PeliculasDB(cf.get_dir())
+#cf = Comfiguracion(APP, config, config_base)
 
 gi.require_version("Gtk","3.0")
 from gi.repository import Gtk, Gio
 
 class VentanaEdicion(Gtk.Window):
     
-    def __init__(self, pelicula, ultima):
+    def __init__(self, pelicula, ultima, cf):
         super().__init__()
         self.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         self.set_border_width(10)
         self.set_default_size(400, 300)
         self.pelicula=pelicula
         self.ultima=ultima
+        self.db = PeliculasDB(cf.get_dir())
+        self.cf = cf
         
         hb = Gtk.HeaderBar()
         hb.set_show_close_button(True)
@@ -110,14 +110,14 @@ class VentanaEdicion(Gtk.Window):
             
             if pelicula[0] != "" and pelicula[3] != "":
                 
-                n = db.insertar_datos(pelicula)
+                n = self.db.insertar_datos(pelicula)
                 if n==0:
                     print("Imposible Añadir Pelicula\n")
                 else:
                     print("Pelicula Añadida con éxito!!!\n")
-                    dato = cf.read_conf()
+                    dato = self.cf.read_conf()
                     dato['ultimo_lugar'] = sitio
-                    cf.escribir_datos(dato)
+                    self.cf.escribir_datos(dato)
                 self.destroy()
             else:
                 self.mesaje_error()
@@ -130,27 +130,27 @@ class VentanaEdicion(Gtk.Window):
                         self.anho_entry.get_text(),
                         self.caratula_entry.get_text(),
                         sitio)
-            pelicula_db = db.consulta_indibidual(self.pelicula[0])
+            pelicula_db = self.db.consulta_indibidual(self.pelicula[0])
             
             action = True
             if pelicula[0] != pelicula_db[1]:
                 print("editamos titulo")
-                db.editar_pelicula('titulo', pelicula[0], self.pelicula[0])
+                self.db.editar_pelicula('titulo', pelicula[0], self.pelicula[0])
                 action = False
             if pelicula[1] != pelicula_db[2]:
                 print("editamos año")
-                db.editar_pelicula('anho', pelicula[1], self.pelicula[0])
+                self.db.editar_pelicula('anho', pelicula[1], self.pelicula[0])
                 action = False
             if pelicula[2] != pelicula_db[3]:
                 print("editamos caratula")
-                db.editar_pelicula('caratula', pelicula[2], self.pelicula[0])
+                self.db.editar_pelicula('caratula', pelicula[2], self.pelicula[0])
                 action = False
             if pelicula[3] != pelicula_db[4]:
                 print("editamos sitio")
-                db.editar_pelicula('ubicacion', pelicula[3], self.pelicula[0])
-                dato = cf.read_conf()
+                self.db.editar_pelicula('ubicacion', pelicula[3], self.pelicula[0])
+                dato = self.cf.read_conf()
                 dato['ultimo_lugar'] = sitio
-                cf.escribir_datos(dato)
+                self.cf.escribir_datos(dato)
                 action = False
             if action:
                 print("no se edita nada")
@@ -159,7 +159,7 @@ class VentanaEdicion(Gtk.Window):
             
     def llenar_store(self):
         
-        peliculas = db.consulta_peliculas()
+        peliculas = self.db.consulta_peliculas()
         lugares = []
         for pelicula in peliculas:
             if pelicula[4] not in lugares:
@@ -194,7 +194,7 @@ class VentanaEdicion(Gtk.Window):
         
 #if __name__=='__main__':
 #    
-#    busqueda = db.consulta_indibidual(95)
+#    busqueda = self.db.consulta_indibidual(95)
 #    #busqueda=''
 #    win = win4(busqueda,'Carpeta 1')
 #    win.connect("destroy", Gtk.main_quit)

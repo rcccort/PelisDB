@@ -10,23 +10,22 @@ from ventana_edicion import VentanaEdicion
 gi.require_version("Gtk","3.0")
 from gi.repository import Gtk, Gio
 
-APP = "pelisdb"
-config = f"{APP}.conf"
-config_base = {'ultimo_lugar':'Carpeta 1', 'dir_caratulas':'pelis', 'tmdb_api_key':''}
+#APP = "pelisdb"
+#config = f"{APP}.conf"
+#config_base = {'ultimo_lugar':'Carpeta 1', 'dir_caratulas':'pelis', 'tmdb_api_key':''}
 
-cf = Comfiguracion(APP, config, config_base)
-
-db = PeliculasDB(cf.get_dir())
-
+#cf = Comfiguracion(APP, config, config_base)
 
 class VentanaInfo(Gtk.Window):
     
-    def __init__(self, pelicula):
+    def __init__(self, pelicula, cf):
         super().__init__()
         self.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         self.set_border_width(10)
         self.set_default_size(400, 200)
         self.pelicula=pelicula
+        self.db = PeliculasDB(cf.get_dir())
+        self.cf = cf
                 
         self.hb = Gtk.HeaderBar()
         self.hb.set_show_close_button(True)
@@ -104,7 +103,7 @@ class VentanaInfo(Gtk.Window):
         self.destroy()
 
     def refrescar(self, widget):
-        pelicula = db.consulta_indibidual(self.pelicula[0])
+        pelicula = self.db.consulta_indibidual(self.pelicula[0])
         self.hb.props.title = pelicula[1]
         self.titulo_entry.set_markup('<span size="x-large"><b>'+str(pelicula[1])+'</b></span>')
         self.anho_entry.set_markup('<span size="x-large"><b>'+str(pelicula[2])+'</b></span>')
@@ -112,11 +111,11 @@ class VentanaInfo(Gtk.Window):
         self.pelicula = pelicula
 
     def completar(self, button):
-        window = VentanaMeta(self.pelicula)
+        window = VentanaMeta(self.pelicula, self.cf)
         window.connect("destroy", self.destruir)
         
     def editar(self, widget):
-        window = VentanaEdicion(self.pelicula, self.pelicula[4])
+        window = VentanaEdicion(self.pelicula, self.pelicula[4], self.cf)
         window.connect('destroy', self.refrescar)
     
     def borrar(self, widget):
@@ -133,7 +132,7 @@ class VentanaInfo(Gtk.Window):
         response = dialog.run()
         if response == Gtk.ResponseType.YES:
             print("Procediendo al borrado de la pelicula")
-            db.borrar_pelicula(self.pelicula[0])
+            self.db.borrar_pelicula(self.pelicula[0])
             self.destroy()
         elif response == Gtk.ResponseType.NO:
             print("Abortando borrado de la pelicula")
@@ -142,7 +141,7 @@ class VentanaInfo(Gtk.Window):
 
 #if __name__=='__main__':
 #    
-#    busqueda = db.consulta_indibidual(82)
+#    busqueda = self.db.consulta_indibidual(82)
 #    win = win2(busqueda)
 #    win.connect("destroy", Gtk.main_quit)
 #    Gtk.main()

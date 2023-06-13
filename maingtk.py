@@ -26,10 +26,6 @@ if not caratulas_dir.exists():
 
 db = PeliculasDB(cf.get_dir())
 
-#base = cf.read_conf()
-#base['opcion3'] = 'Opcion 3'
-#cf.escribir_datos(base)
-
 class VentanaPrincipal(Gtk.Window):
     
     def __init__(self):

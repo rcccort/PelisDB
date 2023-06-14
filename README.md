@@ -7,7 +7,7 @@ base de datos para localizar donde guardo todo lo grabado en cd
 - [x] Añadir descarga de Imágenes (Programa a parte y completa database)
 - [x] Crear Gui en GTK
 
-<img title="" src="./Capturas/Captura.gif" alt="" width="600">
+<img title="" src="./Capturas/Captura.gif" alt="" width="800">
 
 ### Info:
 

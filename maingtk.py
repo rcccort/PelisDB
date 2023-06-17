@@ -1,4 +1,4 @@
-#! /bin/python3
+#!/bin/python3
 # -*- coding: utf-8 -*-
 
 from pelisdb import PeliculasDB

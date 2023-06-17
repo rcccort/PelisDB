@@ -6,7 +6,7 @@ from pathlib import Path
 
 class PeliculasDB:
     
-    def __init__(self, directorio: str) -> None:
+    def __init__(self, directorio: Path) -> None:
         ''' Conecta con la base de datos o la crea si existe en el directorio dado'''
         self.cnn = sqlite3.connect(Path(directorio) / 'pelisdb.db') # nombre del archivo
         self.cur = self.cnn.cursor()

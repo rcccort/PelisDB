@@ -6,6 +6,7 @@ base de datos para localizar donde guardo todo lo grabado en cd
 - [x] Menú Simple para Terminal
 - [x] Añadir descarga de Imágenes (Programa a parte y completa database)
 - [x] Crear Gui en GTK
+- [ ] Depurar Bug al usar (') el la base de datos
 
 <img title="" src="./Capturas/Captura.gif" alt="" width="800">
 

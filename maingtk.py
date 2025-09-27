@@ -15,7 +15,7 @@ from gi.repository import Gtk, Gio, Gdk, GdkPixbuf
 
 APP = "pelisdb"
 config = f"{APP}.conf"
-config_base = {'ultimo_lugar':'Carpeta 1', 'dir_caratulas':'pelis', 'tmdb_api_key':'', 'dark_theme': True}
+config_base = {'ultimo_lugar':'Carpeta 1', 'dir_caratulas':'pelis', 'tmdb_api_key':'', 'dark_theme': False}
 
 cf = Comfiguracion(APP, config, config_base)
 
@@ -108,10 +108,10 @@ class VentanaPrincipal(Gtk.Window):
     def actualizar_icono_tema(self, is_dark):
         if is_dark:
             # El tema es oscuro, el icono es una luna
-            icon_name = "weather-clear-night-symbolic"
+            icon_name = "weather-clear-symbolic"
         else:
             # El tema es claro, el icono es un sol
-            icon_name = "weather-clear-symbolic"
+            icon_name = "weather-clear-night-symbolic"
         image = Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.BUTTON)
         self.theme_button.set_image(image)
 
@@ -243,7 +243,7 @@ if __name__=='__main__':
     # --- Cargar y aplicar el tema guardado ANTES de crear la ventana ---
     config_actual = cf.read_conf()
     # Usamos .get() para seguridad, si el valor no existiera, usaría False
-    tema_oscuro = config_actual.get('dark_theme', True)
+    tema_oscuro = config_actual.get('dark_theme', False)
     settings = Gtk.Settings.get_default()
     settings.set_property("gtk-application-prefer-dark-theme", tema_oscuro)
     # --- Fin de la carga del tema ---

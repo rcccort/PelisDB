@@ -76,6 +76,40 @@ class VentanaPrincipal(Gtk.Window):
 
         self.add(self.scrolled)
         
+        # --- Botón para cambiar de tema (claro/oscuro) ---
+        self.theme_button = Gtk.ToggleButton()
+        self.theme_button.connect("toggled", self.on_theme_toggled)
+        
+        # Sincronizar el estado inicial del botón con la configuración de GTK
+        settings = Gtk.Settings.get_default()
+        is_dark_preferred = settings.get_property("gtk-application-prefer-dark-theme")
+        self.theme_button.set_active(is_dark_preferred)
+        self.actualizar_icono_tema(is_dark_preferred) # Poner el icono inicial correcto
+        
+        hb.pack_end(self.theme_button)
+        # --- Fin del botón de tema ---
+        
+    def on_theme_toggled(self, button):
+        # El estado del botón (activo/inactivo) determina si queremos el tema oscuro
+        is_dark = button.get_active()
+        
+        # Aplicar la configuración a GTK
+        settings = Gtk.Settings.get_default()
+        settings.set_property("gtk-application-prefer-dark-theme", is_dark)
+        
+        # Actualizar el icono para que refleje el estado actual
+        self.actualizar_icono_tema(is_dark)
+
+    def actualizar_icono_tema(self, is_dark):
+        if is_dark:
+            # El tema es oscuro, el icono es una luna
+            icon_name = "weather-clear-night-symbolic"
+        else:
+            # El tema es claro, el icono es un sol
+            icon_name = "weather-clear-symbolic"
+        image = Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.BUTTON)
+        self.theme_button.set_image(image)
+
     def anadir_pelicula(self, widget):
         eleccion_anterior = cf.read_conf()['ultimo_lugar']
         ventana4=VentanaEdicion('',eleccion_anterior, cf)
@@ -124,10 +158,14 @@ class VentanaPrincipal(Gtk.Window):
         return image
             
     def crear_flowbox(self, box, pelis):
-                        
-        box.destroy()
+        
+        # Vaciamos el flowbox antes de llenarlo de nuevo
+        for child in box.get_children():
+            box.remove(child)
+            
         for peli in pelis:
             button = Gtk.Button()
+            button.get_style_context().add_class("boton-imagen")
             button.set_name(str(peli[0]))
             if peli[3] != "":
                 button.set_image(self.redimensionar_imagen(str(cf.get_dir() / peli[3])))
@@ -168,9 +206,7 @@ class VentanaPrincipal(Gtk.Window):
     
     def refrescar(self, button):
         resultado=db.consulta_peliculas()
-        self.scrolled.remove(self.flowbox)
         self.crear_flowbox(self.flowbox, resultado)
-        self.scrolled.add(self.flowbox)
         self.scrolled.show_all()
 
 #class win2(Gtk.Window):
@@ -199,6 +235,26 @@ class VentanaPrincipal(Gtk.Window):
         
 if __name__=='__main__':
     
+    # --- CSS para los botones con imágenes ---
+    css_provider = Gtk.CssProvider()
+    css_provider.load_from_data(b"""
+    .boton-imagen {
+        background: none;
+        border: none;
+        padding: 0;
+        border-radius: 0;
+    }
+    .boton-imagen:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+    """)
+    Gtk.StyleContext.add_provider_for_screen(
+        Gdk.Screen.get_default(),
+        css_provider,
+        Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+    )
+    # --- Fin del CSS ---
+
     win = VentanaPrincipal()
     win.connect("destroy", Gtk.main_quit)
     win.show_all()

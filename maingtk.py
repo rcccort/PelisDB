@@ -15,7 +15,7 @@ from gi.repository import Gtk, Gio, Gdk, GdkPixbuf
 
 APP = "pelisdb"
 config = f"{APP}.conf"
-config_base = {'ultimo_lugar':'Carpeta 1', 'dir_caratulas':'pelis', 'tmdb_api_key':''}
+config_base = {'ultimo_lugar':'Carpeta 1', 'dir_caratulas':'pelis', 'tmdb_api_key':'', 'dark_theme': True}
 
 cf = Comfiguracion(APP, config, config_base)
 
@@ -96,6 +96,11 @@ class VentanaPrincipal(Gtk.Window):
         # Aplicar la configuración a GTK
         settings = Gtk.Settings.get_default()
         settings.set_property("gtk-application-prefer-dark-theme", is_dark)
+        
+        # Guardar el estado en el fichero de configuración
+        config_actual = cf.read_conf()
+        config_actual['dark_theme'] = is_dark
+        cf.escribir_datos(config_actual)
         
         # Actualizar el icono para que refleje el estado actual
         self.actualizar_icono_tema(is_dark)
@@ -234,6 +239,14 @@ class VentanaPrincipal(Gtk.Window):
 #        box.add(label)
         
 if __name__=='__main__':
+
+    # --- Cargar y aplicar el tema guardado ANTES de crear la ventana ---
+    config_actual = cf.read_conf()
+    # Usamos .get() para seguridad, si el valor no existiera, usaría False
+    tema_oscuro = config_actual.get('dark_theme', True)
+    settings = Gtk.Settings.get_default()
+    settings.set_property("gtk-application-prefer-dark-theme", tema_oscuro)
+    # --- Fin de la carga del tema ---
     
     # --- CSS para los botones con imágenes ---
     css_provider = Gtk.CssProvider()
@@ -254,7 +267,7 @@ if __name__=='__main__':
         Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
     )
     # --- Fin del CSS ---
-
+    
     win = VentanaPrincipal()
     win.connect("destroy", Gtk.main_quit)
     win.show_all()
